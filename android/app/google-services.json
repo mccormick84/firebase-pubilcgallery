@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "944573203182",
+    "project_id": "public-gallery-c3503",
+    "storage_bucket": "public-gallery-c3503.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944573203182:android:6c902f5f0965f9adfca9ff",
+        "android_client_info": {
+          "package_name": "com.publicgallerymarsellus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944573203182-pand8u9p5b8hin8cpukfpskvb69jrncu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.publicgallerymarsellus",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "944573203182-fp09jl6tvjjofhkgh86omd44rvb2h7pp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk60BFs5wFqjLIZFwBXQGXOJxW0Bgjgak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944573203182-fp09jl6tvjjofhkgh86omd44rvb2h7pp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
