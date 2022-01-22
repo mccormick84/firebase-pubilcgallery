@@ -35,5 +35,9 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/mccormick84/firebase-pubilcgallery.git",
+  "author": "Kenny <mccormick84@gmail.com>",
+  "license": "MIT"
 }
