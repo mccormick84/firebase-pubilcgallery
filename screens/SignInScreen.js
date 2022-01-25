@@ -13,6 +13,7 @@ import SignButtons from '../components/SignButtons';
 import SignForm from '../components/SignForm';
 import {signIn, signUp} from '../lib/auth';
 import {getUser} from '../lib/users';
+import {useUserContext} from '../contexts/UserContext';
 
 export default function SignInScreen({navigation, route}) {
   const {isSignUp} = route.params || {};
@@ -22,6 +23,7 @@ export default function SignInScreen({navigation, route}) {
     confirmPassword: '',
   });
   const [loading, setLoading] = useState();
+  const {setUser} = useUserContext();
 
   const createChangeTextHandler = name => value => {
     setForm({...form, [name]: value});
@@ -34,6 +36,7 @@ export default function SignInScreen({navigation, route}) {
 
     if (isSignUp && password !== confirmPassword) {
       Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
+      console.log({password, confirmPassword});
       return;
     }
 
@@ -46,7 +49,7 @@ export default function SignInScreen({navigation, route}) {
       if (!profile) {
         navigation.navigate('Welcome', {uid: user.uid});
       } else {
-        //차후 구현
+        setUser(profile); //로그인 시 프로필이 존재하는 계정이라면 setUser 호출
       }
     } catch (e) {
       const messages = {
