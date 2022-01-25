@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Alert,
   Keyboard,
@@ -12,7 +12,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SignButtons from '../components/SignButtons';
 import SignForm from '../components/SignForm';
 import {signIn, signUp} from '../lib/auth';
-import {getUser} from '../lib/users';
 
 export default function SignInScreen({navigation, route}) {
   const {isSignUp} = route.params || {};
@@ -42,12 +41,7 @@ export default function SignInScreen({navigation, route}) {
 
     try {
       const {user} = isSignUp ? await signUp(info) : await signIn(info);
-      const profile = await getUser(user.uid);
-      if (!profile) {
-        navigation.navigate('Welcome', {uid: user.uid});
-      } else {
-        //차후 구현
-      }
+      console.log(user);
     } catch (e) {
       const messages = {
         'auth/email-already-in-use': '이미 가입된 이메일입니다.',

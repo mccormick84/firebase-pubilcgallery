@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -68,3 +69,9 @@ const styles = StyleSheet.create({
 });
 
 export default SetupProfile;
+=======
+import {useNavigation, useRoute} from "@react-navigation/native";
+import React, {useState} from "react";
+import {StyleSheet, View} from "react-native";
+import {signOut} from '../lib/auth';
+>>>>>>> c9fab224d76f4baf8a4d7422f238767e7b5e6d87
