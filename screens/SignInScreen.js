@@ -66,6 +66,10 @@ export default function SignInScreen({navigation, route}) {
     }
   };
 
+  // useEffect(() => {
+  //   return () => setLoading(false); // cleanup function을 이용
+  // }, []);
+
   return (
     <KeyboardAvoidingView
       style={styles.keyboardAvoidingView}

@@ -45,7 +45,7 @@ export default function SignForm({
           placeholder={'비밀번호 확인'}
           secureTextEntry
           value={form.confirmPassword}
-          onChangeText={createChangeTextHandler('confrimPassword')}
+          onChangeText={createChangeTextHandler('confirmPassword')}
           ref={confirmPasswordRef}
           returnKeyType={'done'}
           onsSubmitEditing={onSubmit}
