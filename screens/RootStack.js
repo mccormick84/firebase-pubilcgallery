@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SignInScreen from './SignInScreen';
-import WelcomeScreen from './WelcomeScreen';
 import {useUserContext} from '../contexts/UserContext';
-import MainTab from './MainTab';
 import {getUser} from '../lib/users';
 import {subscribeAuth} from '../lib/auth';
-const Stack = createNativeStackNavigator();
+import MainTab from './MainTab';
+import WelcomeScreen from './WelcomeScreen';
 import UploadScreen from './UploadScreen';
+import SignInScreen from './SignInScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function RootStack() {
   const {user, setUser} = useUserContext();

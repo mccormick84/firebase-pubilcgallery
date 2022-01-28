@@ -9,11 +9,11 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import SignButtons from '../components/SignButtons';
-import SignForm from '../components/SignForm';
 import {signIn, signUp} from '../lib/auth';
 import {getUser} from '../lib/users';
 import {useUserContext} from '../contexts/UserContext';
+import SignForm from '../components/SignForm';
+import SignButtons from '../components/SignButtons';
 
 export default function SignInScreen({navigation, route}) {
   const {isSignUp} = route.params || {};
@@ -31,12 +31,12 @@ export default function SignInScreen({navigation, route}) {
 
   const onSubmit = async () => {
     Keyboard.dismiss();
+    console.log(form);
 
     const {email, password, confirmPassword} = form;
 
     if (isSignUp && password !== confirmPassword) {
       Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
-      console.log({password, confirmPassword});
       return;
     }
 
@@ -65,10 +65,6 @@ export default function SignInScreen({navigation, route}) {
       setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   return () => setLoading(false); // cleanup function을 이용
-  // }, []);
 
   return (
     <KeyboardAvoidingView

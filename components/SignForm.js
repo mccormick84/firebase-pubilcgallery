@@ -20,7 +20,7 @@ export default function SignForm({
         autoCapitalize={'none'}
         autoCorrect={false}
         autoCompletetype={'email'}
-        keyboardtype={'email-address'}
+        keyboardType={'email-address'}
         returnKeyType={'next'}
         onSubmitEditing={() => passwordRef.current.focus()}
       />
@@ -48,7 +48,7 @@ export default function SignForm({
           onChangeText={createChangeTextHandler('confirmPassword')}
           ref={confirmPasswordRef}
           returnKeyType={'done'}
-          onsSubmitEditing={onSubmit}
+          onSubmitEditing={onSubmit}
         />
       )}
     </>

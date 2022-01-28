@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import {signOut} from '../lib/auth';
 import {createUser} from '../lib/users';
-import BorderedInput from './BorderedInput';
-import CustomButton from './CustomButton';
 import {useUserContext} from '../contexts/UserContext';
 import {launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
+import CustomButton from './CustomButton';
+import BorderedInput from './BorderedInput';
 
 export default function SetupProfile() {
   const [displayName, setDisplayName] = useState('');
@@ -29,7 +29,7 @@ export default function SetupProfile() {
   const onSubmit = async () => {
     setLoading(true);
 
-    let photoURL = null;
+    let photoURL: any = null;
 
     if (response) {
       const asset = response.assets[0];
@@ -53,7 +53,7 @@ export default function SetupProfile() {
       photoURL,
     };
 
-    await createUser(user);
+    createUser(user);
     setUser(user);
   };
 
