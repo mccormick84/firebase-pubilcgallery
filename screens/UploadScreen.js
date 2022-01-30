@@ -33,14 +33,14 @@ export default function UploadScreen() {
     const reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
 
     if (Platform.OS === 'android') {
-      reference.putString(asset.base64, 'base64', {
+      await reference.putString(asset.base64, 'base64', {
         contentType: asset.type,
       });
     } else {
-      reference.putFile(asset.uri);
+      await reference.putFile(asset.uri);
     }
 
-    const photoURL = reference.getDownloadURL();
+    const photoURL = await reference.getDownloadURL();
     await createPost({user, photoURL, description});
     // TODO : 포스트 목록 새로 고침
   }, [res, user, description, navigation]);
