@@ -49,7 +49,8 @@ export default function SignInScreen({navigation, route}) {
       if (!profile) {
         navigation.navigate('Welcome', {uid: user.uid});
       } else {
-        setUser(profile); //로그인 시 프로필이 존재하는 계정이라면 setUser 호출
+        //로그인 시 프로필이 존재하는 계정이라면 setUser 호출
+        setUser(profile);
       }
     } catch (e) {
       const messages = {

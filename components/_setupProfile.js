@@ -24,28 +24,76 @@ export default function SetupProfile() {
   const [loading, setLoading] = useState(false);
 
   const {params} = useRoute();
+  // console.log('params : ', params);
   const {uid} = params || {};
 
+  const onCancel = () => {
+    signOut();
+    navigation.goBack();
+  };
+
+  const onSelectImage = () => {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 512,
+      maxHeight: 512,
+      includeBase64: Platform.OS === 'android',
+    };
+    launchImageLibrary(options, res => {
+      if (res.didCancel) {
+        return;
+      }
+      const source = {uri: res.assets[0]?.uri};
+      setResponse(source);
+      // console.log(res.assets[0].uri); // 파일명
+      // console.log(response.assets[0]);
+      // const asset = response.assets[0];
+      // console.log(asset);
+      // const extension = asset.fileName.split('.').pop(); // 확장자 추출
+      // console.log(extension);
+      // const reference = storage().ref(`/profile/${uid}.${extension}`);
+      // console.log(reference);
+      // console.log(asset.uri);
+    });
+  };
+
   const onSubmit = async () => {
+    const {uri} = response;
+    const filename = uri.substring(uri.lastIndexOf('/') + 1);
+    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+    // let photoURL: any = null;
+    // const photoURL = response ? await filename.getDownloadURL() : null;
+
+    const task = storage().ref(filename).putFile(uploadUri);
+
     setLoading(true);
 
-    let photoURL: any = null;
-
-    if (response) {
-      const asset = response.assets[0];
-      const extension = asset.fileName.split('.').pop(); // 확장자 추출
-      const reference = storage().ref(`/profile/${uid}.${extension}`);
-
-      if (Platform.OS === 'android') {
-        await reference.putString(asset.base64, 'base64', {
-          contentType: asset.type,
-        });
-      } else {
-        await reference.putFile(asset.uri);
-      }
-
-      photoURL = response ? reference.getDownloadURL() : null;
+    try {
+      await task;
+    } catch (e) {
+      console.error(e);
     }
+
+    // if (response) {
+    // const asset = response.assets[0];
+    // const extension = asset.fileName.split('.').pop(); // 확장자 추출
+    // const reference = storage().ref(`/profile/${uid}.${extension}`);
+    // const Uri = asset.uri;
+    // const filename = Uri.substring(Uri.lastIndexOf('/') + 1);
+    // const uploadUri =
+    //   Platform.OS === 'ios' ? Uri.replace('file://', '') : Uri;
+    //
+    // const task = storage().ref(filename).putFile(uploadUri);
+    // if (Platform.OS === 'android') {
+    //   await reference.putString(asset.base64, 'base64', {
+    //     contentType: asset.type,
+    //   });
+    // } else {
+    //   await reference.putFile(uploadUri);
+    // }
+
+    // photoURL = response ? await filename.getDownloadURL() : null;
+    // }
 
     const user = {
       id: uid,
@@ -57,37 +105,13 @@ export default function SetupProfile() {
     setUser(user);
   };
 
-  const onCancel = () => {
-    signOut();
-    navigation.goBack();
-  };
-
-  const onSelectImage = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-        maxWidth: 512,
-        maxHeight: 512,
-        includeBase64: Platform.OS === 'android',
-      },
-      res => {
-        if (res.didCancel) {
-          return;
-        }
-        setResponse(res);
-      },
-    );
-  };
-
   return (
     <View style={styles.block}>
       <Pressable onPress={onSelectImage}>
         <Image
           style={styles.circle}
           source={
-            response
-              ? {uri: response?.assets[0]?.uri}
-              : require('../assets/user.png')
+            response ? {uri: response.uri} : require('../assets/user.png')
           }
         />
       </Pressable>
@@ -140,5 +164,4 @@ const styles = StyleSheet.create({
   buttons: {
     marginTop: 48,
   },
-  spinner: {},
 });

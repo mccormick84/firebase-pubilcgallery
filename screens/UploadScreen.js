@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import IconRightButton from '../components/IconRightButton';
-import storage from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import {useUserContext} from '../contexts/UserContext';
 import {v4} from 'uuid';
 import {createPost} from '../lib/posts';
@@ -25,21 +25,23 @@ export default function UploadScreen() {
   const [description, setDescription] = useState('');
   const navigation = useNavigation();
   const {user} = useUserContext;
+
   const onSubmit = useCallback(async () => {
     navigation.pop();
     const asset = res.assets[0];
-
     const extension = asset.fileName.split('.').pop();
     const reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
+
     if (Platform.OS === 'android') {
-      await reference.putString(asset.base64, 'base64', {
+      reference.putString(asset.base64, 'base64', {
         contentType: asset.type,
       });
     } else {
-      await reference.putFile(asset.uri);
+      reference.putFile(asset.uri);
     }
-    const photoURL = await reference.getDownloadURL();
-    await createPost({description, photoURL, user});
+
+    const photoURL = reference.getDownloadURL();
+    await createPost({user, photoURL, description});
     // TODO : 포스트 목록 새로 고침
   }, [res, user, description, navigation]);
 
