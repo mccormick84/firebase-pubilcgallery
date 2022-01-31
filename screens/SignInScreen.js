@@ -31,7 +31,6 @@ export default function SignInScreen({navigation, route}) {
 
   const onSubmit = async () => {
     Keyboard.dismiss();
-    console.log(form);
 
     const {email, password, confirmPassword} = form;
 

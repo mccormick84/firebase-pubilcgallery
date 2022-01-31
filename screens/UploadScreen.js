@@ -24,14 +24,23 @@ export default function UploadScreen() {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [description, setDescription] = useState('');
   const navigation = useNavigation();
-  const {user} = useUserContext;
+  const {user} = useUserContext();
 
   const onSubmit = useCallback(async () => {
     navigation.pop();
+
     const asset = res.assets[0];
     const extension = asset.fileName.split('.').pop();
     const reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
 
+    // const task = reference.putFile(asset.uri);
+    //
+    // try {
+    //   console.log(user);
+    //   await task;
+    // } catch (e) {
+    //   console.log(e);
+    // }
     if (Platform.OS === 'android') {
       await reference.putString(asset.base64, 'base64', {
         contentType: asset.type,
@@ -42,6 +51,7 @@ export default function UploadScreen() {
 
     const photoURL = await reference.getDownloadURL();
     await createPost({user, photoURL, description});
+
     // TODO : 포스트 목록 새로 고침
   }, [res, user, description, navigation]);
 

@@ -1,12 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, StyleSheet} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+} from 'react-native';
 import PostCard from '../components/PostCard';
-import {getPosts, getOlderPosts, PAGE_SIZE} from '../lib/posts';
+import {getNewerPosts, getPosts, getOlderPosts, PAGE_SIZE} from '../lib/posts';
 
 export default function FeedScreen() {
   const [posts, setPosts] = useState(null);
   //마지막 포스트까지 조회했음을 명시하는 상태
   const [noMorePost, setNoMorePost] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     //컴포넌트가 처음 마운트 될 때 포스트 목록을 조회한 후 post 상태에 담기
     getPosts().then(setPosts);
@@ -24,6 +31,20 @@ export default function FeedScreen() {
     setPosts(posts.concat(olderPosts));
   };
 
+  const onRefresh = async () => {
+    if (!posts || posts.length === 0 || refreshing) {
+      return;
+    }
+    const firstPost = posts[0];
+    setRefreshing(true);
+    const newerPosts = await getNewerPosts(firstPost.id);
+    setRefreshing(false);
+    if (newerPosts.length === 0) {
+      return;
+    }
+    setPosts(newerPosts.concat(posts));
+  };
+
   return (
     <FlatList
       data={posts}
@@ -32,11 +53,14 @@ export default function FeedScreen() {
       contentContainerStyle={styles.container}
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.75}
-      // ListFooterComponent={
-      //   !noMorePost && (
-      //     <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
-      //   )
-      // }
+      ListFooterComponent={
+        !noMorePost && (
+          <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
+        )
+      }
+      refreshControl={
+        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+      }
     />
   );
 }

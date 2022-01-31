@@ -53,7 +53,7 @@ export default function SetupProfile() {
       photoURL,
     };
 
-    createUser(user);
+    await createUser(user);
     setUser(user);
   };
 
