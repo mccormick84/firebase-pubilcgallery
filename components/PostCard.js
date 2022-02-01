@@ -1,9 +1,12 @@
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useNavigationState} from '@react-navigation/native';
 import React, {useMemo} from 'react';
 import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
 import Avatar from './Avatar';
 
 export default function PostCard({user, photoURL, description, createdAt, id}) {
+  const routeNames = useNavigationState(state => state.routeNames);
+  // console.log(routeNames);
+
   const date = useMemo(
     () => (createdAt ? new Date(createdAt._seconds * 1000) : new Date()),
     [createdAt],
@@ -13,11 +16,15 @@ export default function PostCard({user, photoURL, description, createdAt, id}) {
 
   //사용자 프로필 화면 열기
   const onOpenProfile = () => {
-    /* https://reactnavigation.org/docs/navigation-prop#navigate */
-    navigation.navigate('Profile', {
-      userId: user.id,
-      displayName: user.displayName,
-    });
+    // My Profile이 존재하는 지 확인
+    if (routeNames.find(routeName => routeName === 'MyProfile')) {
+      navigation.navigate('MyProfile');
+    } else {
+      navigation.navigate('Profile', {
+        userId: user.id,
+        displayName: user.displayName,
+      });
+    }
   };
 
   return (

@@ -1,6 +1,18 @@
 import React from 'react';
-import {View} from 'react-native';
+import Profile from '../components/Profile';
+import {useNavigation} from '@react-navigation/native';
+import {useUserContext} from '../contexts/UserContext';
+import useRefEffect from 'react-native/Libraries/Utilities/useRefEffect';
 
 export default function MyProfileScreen() {
-  return <View />;
+  const {user} = useUserContext();
+  const navigation = useNavigation();
+
+  useRefEffect(() => {
+    navigation.setOptions({
+      title: user.displayName,
+    });
+  }, [navigation, user]);
+
+  return <Profile userId={user.id} />;
 }

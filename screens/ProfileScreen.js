@@ -1,5 +1,5 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useLayoutEffect} from 'react';
 import Profile from '../components/Profile';
 
 export default function ProfileScreen() {
@@ -7,7 +7,7 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const {userId, displayName} = route.params ?? {};
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       title: displayName,
     });
