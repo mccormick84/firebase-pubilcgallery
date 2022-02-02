@@ -29,7 +29,7 @@ export default function SetupProfile() {
   const onSubmit = async () => {
     setLoading(true);
 
-    let photoURL: any = null;
+    let photoURL = null;
 
     if (response) {
       const asset = response.assets[0];
@@ -44,7 +44,7 @@ export default function SetupProfile() {
         await reference.putFile(asset.uri);
       }
 
-      photoURL = response ? reference.getDownloadURL() : null;
+      photoURL = response ? await reference.getDownloadURL() : null;
     }
 
     const user = {
@@ -53,12 +53,12 @@ export default function SetupProfile() {
       photoURL,
     };
 
-    await createUser(user);
+    createUser(user);
     setUser(user);
   };
 
-  const onCancel = () => {
-    signOut();
+  const onCancel = async () => {
+    await signOut();
     navigation.goBack();
   };
 
@@ -82,7 +82,15 @@ export default function SetupProfile() {
   return (
     <View style={styles.block}>
       <Pressable onPress={onSelectImage}>
-        <Avatar source={response && {uri: response.uri}} size={128} />
+        {/*<Avatar source={response && {uri: response.uri}} size={128} />*/}
+        <Avatar
+          source={
+            response
+              ? {uri: response?.assets[0]?.uri}
+              : require('../assets/user.png')
+          }
+          size={128}
+        />
       </Pressable>
       <View style={styles.form}>
         <BorderedInput
