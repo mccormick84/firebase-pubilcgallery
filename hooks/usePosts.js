@@ -1,10 +1,14 @@
 import {useEffect, useState, useCallback} from 'react';
 import {getNewerPosts, getOlderPosts, getPosts, PAGE_SIZE} from '../lib/posts';
+import {useUserContext} from '../contexts/UserContext';
+import usePostActions from './usePostActions';
+import usePostsEventEffect from './usePostsEventEffect';
 
 export default function usePosts(userId) {
   const [posts, setPosts] = useState(null);
   const [noMorePost, setNoMorePost] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const {user} = useUserContext();
 
   const onLoadMore = async () => {
     if (noMorePost || !posts || posts.length < PAGE_SIZE) {
@@ -47,6 +51,30 @@ export default function usePosts(userId) {
     },
     [posts],
   );
+
+  const updatePost = useCallback(
+    ({postId, description}) => {
+      //id가 일치하는 포스트를 찾아서 description 변경
+      const nextPosts = posts.map(post =>
+        post.id === postId
+          ? {
+              ...post,
+              description,
+            }
+          : post,
+      );
+      setPosts(nextPosts);
+    },
+    [posts],
+  );
+
+  usePostsEventEffect({
+    refresh: onRefresh,
+    removePost,
+    // TODO: 이거 뭐지?
+    enabled: !userId || userId === user.id,
+    updatePost,
+  });
 
   return {
     posts,
