@@ -4,6 +4,8 @@ import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
 import Avatar from './Avatar';
 import {useUserContext} from '../contexts/UserContext';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ActionSheetModal from './ActionSheetModal';
+import usePostActions from '../hooks/usePostActions';
 
 export default function PostCard({user, photoURL, description, createdAt, id}) {
   const date = useMemo(
@@ -29,32 +31,45 @@ export default function PostCard({user, photoURL, description, createdAt, id}) {
     }
   };
 
+  //usePostActions의 커스텀 Hook을 구조분해할당으로 가져오기
+  const {isSelecting, onPressMore, onClose, actions} = usePostActions({
+    id,
+    description,
+  });
+
   return (
-    <View style={styles.block}>
-      <View style={[styles.head, styles.paddingBlock]}>
-        <Pressable style={styles.profile} onPress={onOpenProfile}>
-          <Avatar source={user.photoURL && {uri: user.photoURL}} />
-          <Text style={styles.displayName}>{user.displayName}</Text>
-        </Pressable>
-        {isMyPost && (
-          <Pressable hitSlop={8}>
-            <Icon name={'more-vert'} size={20} />
+    <>
+      <View style={styles.block}>
+        <View style={[styles.head, styles.paddingBlock]}>
+          <Pressable style={styles.profile} onPress={onOpenProfile}>
+            <Avatar source={user.photoURL && {uri: user.photoURL}} />
+            <Text style={styles.displayName}>{user.displayName}</Text>
           </Pressable>
-        )}
+          {isMyPost && (
+            <Pressable hitSlop={8} onPress={onPressMore}>
+              <Icon name={'more-vert'} size={20} />
+            </Pressable>
+          )}
+        </View>
+        <Image
+          source={{uri: photoURL}}
+          style={styles.image}
+          resizeMethod={'resize'}
+          resizeMode={'cover'}
+        />
+        <View style={styles.paddingBlock}>
+          <Text style={styles.description}>{description}</Text>
+          <Text date={date} style={styles.date}>
+            {date.toLocaleString()}
+          </Text>
+        </View>
       </View>
-      <Image
-        source={{uri: photoURL}}
-        style={styles.image}
-        resizeMethod={'resize'}
-        resizeMode={'cover'}
+      <ActionSheetModal
+        visible={isSelecting}
+        actions={actions}
+        onClose={onClose}
       />
-      <View style={styles.paddingBlock}>
-        <Text style={styles.description}>{description}</Text>
-        <Text date={date} style={styles.date}>
-          {date.toLocaleString()}
-        </Text>
-      </View>
-    </View>
+    </>
   );
 }
 
