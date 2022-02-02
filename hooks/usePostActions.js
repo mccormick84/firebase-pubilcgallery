@@ -9,7 +9,10 @@ export default function usePostActions({id, description}) {
   const route = useRoute();
 
   const edit = () => {
-    console.log('TODO: edit');
+    navigation.navigate('Modify', {
+      id,
+      description,
+    });
   };
 
   const remove = async () => {
