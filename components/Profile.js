@@ -11,15 +11,31 @@ import {getUser} from '../lib/users';
 import Avatar from './Avatar';
 import PostGridItem from './PostGridItem';
 import usePosts from '../hooks/usePosts';
+import {useUserContext} from '../contexts/UserContext';
+import events from '../lib/events';
 
 export default function Profile({userId}) {
   const [user, setUser] = useState(null);
   const {posts, noMorePost, refreshing, onLoadMore, onRefresh} =
     usePosts(userId);
 
+  const {user: me} = useUserContext();
+  const isMyProfile = me.id === userId;
+
   useEffect(() => {
     getUser(userId).then(setUser);
   }, [userId]);
+
+  useEffect(() => {
+    //  자신의 프로필을 보고 있을 때만 새 포스트 작성 후 새로 고침
+    if (!isMyProfile) {
+      return;
+    }
+    events.addListener('refresh', onRefresh);
+    return () => {
+      events.removeListener('refresh', onRefresh);
+    };
+  }, [isMyProfile, onRefresh]);
 
   if (!user || !posts) {
     return (

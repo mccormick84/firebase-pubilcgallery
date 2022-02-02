@@ -15,6 +15,7 @@ import storage from '@react-native-firebase/storage';
 import {useUserContext} from '../contexts/UserContext';
 import {v4} from 'uuid';
 import {createPost} from '../lib/posts';
+import events from '../lib/events';
 
 export default function UploadScreen() {
   const route = useRoute();
@@ -33,14 +34,6 @@ export default function UploadScreen() {
     const extension = asset.fileName.split('.').pop();
     const reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
 
-    // const task = reference.putFile(asset.uri);
-    //
-    // try {
-    //   console.log(user);
-    //   await task;
-    // } catch (e) {
-    //   console.log(e);
-    // }
     if (Platform.OS === 'android') {
       await reference.putString(asset.base64, 'base64', {
         contentType: asset.type,
@@ -51,7 +44,7 @@ export default function UploadScreen() {
 
     const photoURL = await reference.getDownloadURL();
     await createPost({user, photoURL, description});
-
+    events.emit('refresh');
     // TODO : 포스트 목록 새로 고침
   }, [res, user, description, navigation]);
 
