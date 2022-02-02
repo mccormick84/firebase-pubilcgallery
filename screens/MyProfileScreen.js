@@ -1,16 +1,22 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Profile from '../components/Profile';
 import {useNavigation} from '@react-navigation/native';
 import {useUserContext} from '../contexts/UserContext';
-import useRefEffect from 'react-native/Libraries/Utilities/useRefEffect';
+import IconRightButton from '../components/IconRightButton';
 
 export default function MyProfileScreen() {
   const {user} = useUserContext();
   const navigation = useNavigation();
 
-  useRefEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       title: user.displayName,
+      headerRight: () => (
+        <IconRightButton
+          name={'settings'}
+          onPress={() => navigation.push('Setting')}
+        />
+      ),
     });
   }, [navigation, user]);
 

@@ -20,6 +20,7 @@ export default function FeedScreen() {
       contentContainerStyle={styles.container}
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.75}
+      disableVirtualization={false}
       ListFooterComponent={
         !noMorePost && (
           <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />

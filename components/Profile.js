@@ -38,6 +38,7 @@ export default function Profile({userId}) {
       renderItem={renderItem}
       numColumns={3}
       keyExtractor={item => item.id}
+      disableVirtualization={false}
       ListHeaderComponent={
         <View style={styles.userInfo}>
           <Avatar source={user.photoURL && {uri: user.photoURL}} size={128} />
