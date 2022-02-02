@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {ActionSheetIOS, Platform} from 'react-native';
 import {removePost} from '../lib/posts';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import events from '../lib/events';
 
 export default function usePostActions({id, description}) {
   const [isSelecting, setIsSelecting] = useState(false);
@@ -16,13 +17,13 @@ export default function usePostActions({id, description}) {
   };
 
   const remove = async () => {
-    console.log('Removed post!');
     await removePost(id);
 
     // 현재 단일 포스트 조회 화면이라면 뒤로가기
     if (route.name === 'Post') {
       navigation.pop();
     }
+    events.emit('removePost', id);
 
     // TODO: 홈 및 프로필 화면의 목록 업데이트
   };
