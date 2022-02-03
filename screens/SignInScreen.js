@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Alert,
   Keyboard,
@@ -65,6 +65,10 @@ export default function SignInScreen({navigation, route}) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {};
+  }, []);
 
   return (
     <KeyboardAvoidingView
